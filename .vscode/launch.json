@@ -1,0 +1,17 @@
+{
+    // 參考: https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot 啟動 (ApiDemoApplication)",
+            "request": "launch",
+            "mainClass": "com.example.api_demo.ApiDemoApplication",
+            "projectName": "api_demo",
+            "cwd": "${workspaceFolder}/api_demo",
+            "args": "",
+            "env": {},
+            "console": "integratedTerminal"
+        }
+    ]
+}
