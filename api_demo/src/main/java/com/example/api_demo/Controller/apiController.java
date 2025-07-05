@@ -163,6 +163,10 @@ public class apiController {
 
         try {
             PriceSnapshot snapshot = coindeskService.getPriceSnapshotById(id);
+            if (snapshot == null) {
+                return new ResponseEntity<>("PriceSnapshot with ID " + id + " not found",
+                        HttpStatus.NOT_FOUND);
+            }
             coindeskService.deletePriceSnapshot(snapshot);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(),
