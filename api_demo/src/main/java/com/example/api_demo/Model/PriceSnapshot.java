@@ -3,13 +3,14 @@ package com.example.api_demo.Model;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "price_snapshot")
 public class PriceSnapshot extends Audit {
 
