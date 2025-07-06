@@ -1,8 +1,7 @@
-package com.example.api_demo.Repository;
-
+package com.example.api_demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.api_demo.Model.PriceSnapshot;
+import com.example.api_demo.model.PriceSnapshot;
 
 public interface PriceSnapshotRepository extends JpaRepository<PriceSnapshot, Long> {
 

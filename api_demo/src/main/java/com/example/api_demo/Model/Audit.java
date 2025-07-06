@@ -1,4 +1,4 @@
-package com.example.api_demo.Model;
+package com.example.api_demo.model;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

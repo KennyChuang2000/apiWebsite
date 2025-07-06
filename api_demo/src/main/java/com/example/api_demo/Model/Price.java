@@ -1,4 +1,4 @@
-package com.example.api_demo.Model;
+package com.example.api_demo.model;
 
 import javax.persistence.*;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.example.api_demo.Controller;
+package com.example.api_demo.controller;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.example.api_demo.Model.PriceSnapshot;
-import com.example.api_demo.Model.Bean.CoindeskApiBean;
-import com.example.api_demo.Service.CoindeskService;
-import com.example.api_demo.Model.Currency;
+import com.example.api_demo.model.PriceSnapshot;
+import com.example.api_demo.model.bean.CoindeskApiBean;
+import com.example.api_demo.service.CoindeskService;
+import com.example.api_demo.model.Currency;
 import org.springframework.http.MediaType;
 
 @RestController

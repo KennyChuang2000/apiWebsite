@@ -1,4 +1,4 @@
-package com.example.api_demo.Service;
+package com.example.api_demo.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,11 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.example.api_demo.Model.Bean.CoindeskApiBean;
-import com.example.api_demo.Repository.PriceSnapshotRepository;
+import com.example.api_demo.model.bean.CoindeskApiBean;
+import com.example.api_demo.repository.PriceSnapshotRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.api_demo.Model.Price;
-import com.example.api_demo.Model.PriceSnapshot;
+import com.example.api_demo.model.Price;
+import com.example.api_demo.model.PriceSnapshot;
 
 @Service
 public class CoindeskService {

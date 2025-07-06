@@ -1,4 +1,4 @@
-package com.example.api_demo.Model.Bean;
+package com.example.api_demo.model.bean;
 
 import lombok.Getter;
 import lombok.Setter;

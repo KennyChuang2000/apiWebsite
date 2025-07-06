@@ -1,4 +1,4 @@
-package com.example.api_demo.Config;
+package com.example.api_demo.config;
 
 import java.util.Optional;
 import org.springframework.context.annotation.Bean;

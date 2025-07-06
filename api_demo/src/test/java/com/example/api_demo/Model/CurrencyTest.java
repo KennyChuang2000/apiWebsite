@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.api_demo.model.Currency;
+
 @SpringBootTest
 class CurrencyTest {
     @Test
