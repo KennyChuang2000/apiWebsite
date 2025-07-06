@@ -1,6 +1,10 @@
 package com.example.api_demo.Controller;
 
-
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,9 +22,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.example.api_demo.Model.PriceSnapshot;
 import com.example.api_demo.Model.Bean.CoindeskApiBean;
 import com.example.api_demo.Service.CoindeskService;
+import com.example.api_demo.Model.Currency;
 import org.springframework.http.MediaType;
-
-
 
 @RestController
 @RequestMapping("/coindesk")
@@ -39,11 +42,9 @@ public class apiController {
         // 取得 coindesk API 的 URL
         System.out.println("coindesk API URL: " + coindeskApiUrl);
         String json = null;
-        WebClient webClient = WebClient.create();
 
         try {
-            json = webClient.get().uri(coindeskApiUrl).accept(MediaType.APPLICATION_JSON).retrieve()
-                    .bodyToMono(String.class).block();
+            json = fetchCoindeskJson();
 
             System.out.println("Response from coindesk API: " + json);
         } catch (Exception e) {
@@ -52,8 +53,6 @@ public class apiController {
         }
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
-
-
 
     // 新增
     @PostMapping
@@ -75,8 +74,6 @@ public class apiController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
-
         return new ResponseEntity<>("Saved!", HttpStatus.OK);
     }
 
@@ -91,13 +88,11 @@ public class apiController {
             return ResponseEntity.badRequest().body("JSON cannot be null or empty");
         }
 
-
         try {
             // 檢查是否存在該 ID 的 PriceSnapshot
             if (coindeskService.getPriceSnapshotById(id) == null) {
                 return ResponseEntity.badRequest().body("not found priceSnapshot with ID: " + id);
             }
-
 
             CoindeskApiBean coindeskApiBean = coindeskService.transJsonToDto(json);
 
@@ -153,7 +148,6 @@ public class apiController {
         return ResponseEntity.ok("Get all!");
     }
 
-
     // 刪除
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCoinDeskApi(@PathVariable Long id) {
@@ -171,5 +165,48 @@ public class apiController {
         return new ResponseEntity<>("snapshot " + id + " is Deleted", HttpStatus.OK);
     }
 
+    // 轉換api
+    @GetMapping("/transApi")
+    public ResponseEntity<?> getNewApi() {
+        try {
+            String json = fetchCoindeskJson();
+
+            CoindeskApiBean bean = coindeskService.transJsonToDto(json);
+
+            Map<String, Object> result = new HashMap<>();
+
+            if (bean.getTime() == null || bean.getTime().getUpdatedISO() == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error: Time or updatedISO is null");
+            }
+
+            String formattedTime = bean.getTime().getUpdatedISO().toString();
+
+            result.put("updatedTime", formattedTime);
+
+            List<Map<String, Object>> currencyList = bean.getBpi().values().stream().map(bpi -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("code", bpi.getCode());
+                map.put("name_zh", Currency.getZhNameByCode(bpi.getCode()));
+                map.put("rate", bpi.getRate());
+                return map;
+            }).collect(Collectors.toList());
+            result.put("currencies", currencyList);
+
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+    private String fetchCoindeskJson() {
+        WebClient webClient = WebClient.create();
+        return webClient.get().uri(coindeskApiUrl)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 
 }
