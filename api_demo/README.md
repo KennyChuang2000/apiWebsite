@@ -9,17 +9,16 @@ This project is a Spring Boot application that uses an H2 in-memory database. Be
 ### 1. `price_snapshot` Table
 ```sql
 CREATE TABLE price_snapshot (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key for price_snapshot table',
-    updated VARCHAR(255) COMMENT 'Last updated time as a string',
-    updated_iso TIMESTAMP COMMENT 'Last updated time in ISO format',
-    updateduk VARCHAR(50) COMMENT 'Last updated time in UK format',
-    disclaimer VARCHAR(255) COMMENT 'Disclaimer text for the snapshot',
-    chart_name VARCHAR(50) COMMENT 'Name of the chart (e.g., currency)',
-    created_date TIMESTAMP NOT NULL COMMENT 'Record creation timestamp',
-    last_modified_date TIMESTAMP COMMENT 'Last modification timestamp'
-) COMMENT = 'Table to store price snapshot data';
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    updated VARCHAR(255),
+    updated_iso TIMESTAMP,
+    updateduk VARCHAR(50),
+    disclaimer VARCHAR(255),
+    chart_name VARCHAR(50),
+    created_date TIMESTAMP NOT NULL,
+    last_modified_date TIMESTAMP
+);
 
--- Create indexes for `price_snapshot`
 CREATE INDEX idx_price_snapshot_created_date ON price_snapshot (created_date);
 CREATE INDEX idx_price_snapshot_updated_iso ON price_snapshot (updated_iso);
 ```
@@ -27,19 +26,18 @@ CREATE INDEX idx_price_snapshot_updated_iso ON price_snapshot (updated_iso);
 ### 2. `price` Table
 ```sql
 CREATE TABLE price (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key for price table',
-    snapshot_id BIGINT NOT NULL COMMENT 'Foreign key referencing price_snapshot table',
-    code VARCHAR(10) COMMENT 'Currency code (e.g., USD, GBP)',
-    symbol VARCHAR(10) COMMENT 'Currency symbol (e.g., $, £)',
-    rate VARCHAR(50) COMMENT 'Exchange rate as a string',
-    description VARCHAR(50) COMMENT 'Description of the currency',
-    rate_float DECIMAL(18, 6) COMMENT 'Exchange rate as a decimal value',
-    created_date TIMESTAMP NOT NULL COMMENT 'Record creation timestamp',
-    last_modified_date TIMESTAMP COMMENT 'Last modification timestamp',
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    snapshot_id BIGINT NOT NULL,
+    code VARCHAR(10),
+    symbol VARCHAR(10),
+    rate VARCHAR(50),
+    description VARCHAR(50),
+    rate_float DECIMAL(18, 6),
+    created_date TIMESTAMP NOT NULL,
+    last_modified_date TIMESTAMP,
     FOREIGN KEY (snapshot_id) REFERENCES price_snapshot(id) ON DELETE CASCADE
-) COMMENT = 'Table to store price details for each snapshot';
+);
 
--- Create indexes for `price`
 CREATE INDEX idx_price_snapshot_id ON price (snapshot_id);
 CREATE INDEX idx_price_code ON price (code);
 CREATE INDEX idx_price_created_date ON price (created_date);
