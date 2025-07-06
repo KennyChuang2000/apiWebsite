@@ -7,7 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.example.api_demo.Model.Bean.CoindeskApiBean;
 import com.example.api_demo.Repository.PriceSnapshotRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +23,12 @@ import com.example.api_demo.Model.PriceSnapshot;
 public class CoindeskService {
     private final PriceSnapshotRepository priceSnapshotRepository;
 
+    @Value("${coindesk.api}")
+    private String coindeskApiUrl;
+
     public CoindeskService(PriceSnapshotRepository priceSnapshotRepository) {
         this.priceSnapshotRepository = priceSnapshotRepository;
     }
-
-
 
     public CoindeskApiBean transJsonToDto(String json) throws Exception {
         CoindeskApiBean coindeskApiBean = new CoindeskApiBean();
@@ -107,7 +113,6 @@ public class CoindeskService {
         return bean;
     }
 
-
     public void savePriceSnapshot(PriceSnapshot priceSnapshot) throws Exception {
         if (priceSnapshot == null) {
             throw new IllegalArgumentException("PriceSnapshot cannot be null");
@@ -128,12 +133,21 @@ public class CoindeskService {
         priceSnapshotRepository.delete(priceSnapshot);
     }
 
-
     private LocalDateTime parseUpdatedISO(String isoString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
         OffsetDateTime odt = OffsetDateTime.parse(isoString, formatter);
         return odt.toLocalDateTime();
     }
 
+    public String fetchCoindeskJson() throws Exception {
+        WebClient webClient = WebClient.create();
+        System.out.println("coindesk API URL: " + coindeskApiUrl);
+
+        return webClient.get().uri(coindeskApiUrl)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 
 }

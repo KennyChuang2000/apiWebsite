@@ -28,8 +28,6 @@ import org.springframework.http.MediaType;
 @RestController
 @RequestMapping("/coindesk")
 public class apiController {
-    @Value("${coindesk.api}")
-    private String coindeskApiUrl;
 
     private final CoindeskService coindeskService;
 
@@ -39,12 +37,11 @@ public class apiController {
 
     @GetMapping("/callApi")
     public ResponseEntity<String> coinDeskApi(HttpServletRequest request) {
-        // 取得 coindesk API 的 URL
-        System.out.println("coindesk API URL: " + coindeskApiUrl);
+
         String json = null;
 
         try {
-            json = fetchCoindeskJson();
+            json = coindeskService.fetchCoindeskJson();
 
             System.out.println("Response from coindesk API: " + json);
         } catch (Exception e) {
@@ -173,7 +170,7 @@ public class apiController {
     @GetMapping("/transApi")
     public ResponseEntity<?> getNewApi() {
         try {
-            String json = fetchCoindeskJson();
+            String json = coindeskService.fetchCoindeskJson();
 
             CoindeskApiBean bean = coindeskService.transJsonToDto(json);
 
@@ -202,15 +199,6 @@ public class apiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error: " + e.getMessage());
         }
-    }
-
-    private String fetchCoindeskJson() {
-        WebClient webClient = WebClient.create();
-        return webClient.get().uri(coindeskApiUrl)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
     }
 
 }
