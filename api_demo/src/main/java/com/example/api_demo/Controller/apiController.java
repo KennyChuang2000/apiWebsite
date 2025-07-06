@@ -44,11 +44,17 @@ public class apiController {
             json = coindeskService.fetchCoindeskJson();
 
             System.out.println("Response from coindesk API: " + json);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(json);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("Error: " + e.getMessage());
         }
-        return new ResponseEntity<>(json, HttpStatus.OK);
+
     }
 
     // 新增
@@ -194,7 +200,8 @@ public class apiController {
             }).collect(Collectors.toList());
             result.put("currencies", currencyList);
 
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
+                    .body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error: " + e.getMessage());
