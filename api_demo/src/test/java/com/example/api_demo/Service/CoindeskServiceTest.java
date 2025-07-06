@@ -1,7 +1,6 @@
-package com.example.api_demo.Service;
+package com.example.api_demo.service;
 
 import com.example.api_demo.model.bean.CoindeskApiBean;
-import com.example.api_demo.service.CoindeskService;
 import com.example.api_demo.model.PriceSnapshot;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
