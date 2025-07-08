@@ -3,6 +3,40 @@
 This project is a Spring Boot application that uses an H2 in-memory database. Below are the SQL scripts for creating the necessary tables and indexes.
 
 ---
+## Spec
+| 項目         | 說明                        |
+| ---------- | ------------------------- |
+| Build Tool | Maven                     |
+| Java 版本    | JDK 8                     |
+| 框架         | Spring Boot               |
+| ORM 工具     | Spring Data JPA 或 OpenJPA |
+| 資料庫        | H2（記憶體資料庫）                |
+| 測試框架       | JUnit             |
+
+## 功能
+### 1.幣別資料表 CRUD API
+建立幣別與中文名稱對應的資料表。
+
+    提供以下 RESTful API 功能：
+
+        * 查詢
+        * 新增
+        * 修改
+        * 刪除
+### 2.呼叫 Coindesk API
+透過 RESTTemplate 呼叫上游 Coindesk API，獲取即時匯率資訊。
+將原始 JSON 內容儲存至物件中，供後續資料轉換使用。
+
+### 3.資料轉換 API（轉換後輸出）
+轉換 Coindesk API 回傳的資料，組成一個新的 API 格式：
+
+    updatedTime：更新時間，格式為 yyyy/MM/dd HH:mm:ss
+    幣別資料包含：
+    幣別代碼（code）
+    幣別中文名稱（從資料表讀取）
+    匯率（rate）
+
+
 
 ## Table Creation SQL
 
