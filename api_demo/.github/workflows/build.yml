@@ -1,6 +1,7 @@
 name: Build Spring Boot Jar
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
