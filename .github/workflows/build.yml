@@ -63,7 +63,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-            IMAGE_NAME=${{ github.repository }}         # e.g., kennychuang/apiWebsite
+            IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/apiwebsite"   # e.g., kennychuang/apiWebsite
             IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')  # docker repo 必須小寫
             IMAGE_TAG=${{ github.sha }}
 
